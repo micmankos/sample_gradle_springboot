@@ -1,12 +1,17 @@
 # sample_gradle_springboot
 
 ```sh
+# from top level directory, create a gradle wrapper
+gradle wrapper
+
+# assuming your build.gradle uses the jar plugin, you should be able to run the following tasks
+
 # build with below
 # this will generate a jar file under build/libs/
-gradle build
+./gradlew build
 
 # run tests with
-grade test
+./gradlew test
 
 # run jar with
 java -jar build/libs/<jar_file>.jar
@@ -16,6 +21,18 @@ gradle clean
 ```
 
 ## Notes
+For `./gradlew build`, make sure you specify a main entry point [like here](https://stackoverflow.com/a/32567525/12334685)
+```
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+      'Main-Class': '<java_package>.<class_with_Main_method>'
+    )
+  }
+}
+```
+
 Note that I added below to the `build.gradle` file to get the webserver to stay running
 ```
 implementation 'org.springframework.boot:spring-boot-starter-web'
